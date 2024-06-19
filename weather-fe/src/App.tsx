@@ -1,58 +1,32 @@
 import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Main from './pages/Main';
+import HistoryList from './pages/List';
+import { AppBar, Toolbar, Typography, Container, Box, Link } from '@mui/material';
 
-function App() {
+const App: React.FC = () => {
+    console.log(process.env);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
+      <Router>
+        <AppBar position="static">
+          <Toolbar>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              Weather App
+            </Typography>
+            <Box>
+              <Link href="/" color="inherit" sx={{ marginRight: 2 }}>Main</Link>
+              <Link href="/history" color="inherit">History</Link>
+            </Box>
+          </Toolbar>
+        </AppBar>
+        <Container>
+          <Routes>
+            <Route path="/" element={<Main />} />
+            <Route path="/history" element={<HistoryList />} />
+          </Routes>
+        </Container>
+      </Router>
   );
-}
+};
 
 export default App;
