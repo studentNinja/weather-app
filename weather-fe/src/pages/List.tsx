@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { fetchHistory, fetchWeather } from '../features/weather/weatherSlice';
-import { Container, Typography, List, ListItem, ListItemText, Box, Card, CardContent, Button } from '@mui/material';
+import { Container, Typography, List, Box, Card, CardContent, Button } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { useNavigate } from 'react-router-dom';
 

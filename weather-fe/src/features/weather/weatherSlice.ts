@@ -1,9 +1,10 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import axiosInstance from '../../api/axiosInstance';
+import { WeatherData, WeatherHistory } from '../../types/weather';
 
 interface WeatherState {
-    data: any;
-    history: any[];
+    data: WeatherData | null;
+    history: WeatherHistory[];
     status: 'idle' | 'loading' | 'succeeded' | 'failed';
     error: string | null;
 }
@@ -17,7 +18,7 @@ const initialState: WeatherState = {
 
 export const fetchWeather = createAsyncThunk('weather/fetchWeather', async (city: string, { rejectWithValue }) => {
     try {
-        const response = await axiosInstance.get(`/weather/city/${city}`);
+        const response = await axiosInstance.get<WeatherData>(`/weather/city/${city}`);
         return response.data;
     } catch (err: any) {
         if (err.response && err.response.data && err.response.data.error) {
@@ -29,7 +30,7 @@ export const fetchWeather = createAsyncThunk('weather/fetchWeather', async (city
 });
 
 export const fetchHistory = createAsyncThunk('weather/fetchHistory', async () => {
-    const response = await axiosInstance.get('/weather/history');
+    const response = await axiosInstance.get<WeatherHistory[]>('/weather/history');
     return response.data;
 });
 
