@@ -11,10 +11,11 @@ const weatherProxy = async (req, res, next) => {
         const response = await axios.get(url);
         req.weatherData = response.data;
         req.searchedCity = city;
-
         next();
     } catch (error) {
-        res.status(500).json({ error: 'Failed to fetch weather data from API' });
+        console.log(error)
+        req.apiError = { status: error.response.data.cod, message: error.response.data.message };
+        next();
     }
 };
 

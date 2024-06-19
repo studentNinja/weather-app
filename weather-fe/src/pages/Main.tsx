@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { fetchWeather } from '../features/weather/weatherSlice';
-import { Container, TextField, Button, Typography, Box, Paper } from '@mui/material';
+import { Container, TextField, Button, Typography, Box, Paper, Alert } from '@mui/material';
 import Map from '../components/Map';
-import {useAppDispatch, useAppSelector} from "../app/hooks";
+import { useAppDispatch, useAppSelector } from '../app/hooks';
 
 const Main: React.FC = () => {
     const [city, setCity] = useState('');
     const [error, setError] = useState('');
-    const dispatch= useAppDispatch();
+    const dispatch = useAppDispatch();
     const weather = useAppSelector((state) => state.weather);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -19,8 +19,12 @@ const Main: React.FC = () => {
 
     const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        const cityPattern = /^[a-zA-Z\s-]+$/;
         if (!city.trim()) {
-            setError('Please enter a city name');
+            setError('Please enter a city name.');
+            return;
+        } else if (!cityPattern.test(city.trim())) {
+            setError('Please enter correct city name.');
             return;
         }
         dispatch(fetchWeather(city));
@@ -65,7 +69,9 @@ const Main: React.FC = () => {
                     </Box>
                 )}
                 {weather.status === 'failed' && (
-                    <Typography color="error">{weather.error}</Typography>
+                    <Box mt={4}>
+                        <Alert severity="error">{weather.error}</Alert>
+                    </Box>
                 )}
             </Box>
         </Container>

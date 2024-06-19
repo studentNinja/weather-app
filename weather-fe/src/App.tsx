@@ -5,7 +5,6 @@ import HistoryList from './pages/List';
 import { AppBar, Toolbar, Typography, Container, Box, Link } from '@mui/material';
 
 const App: React.FC = () => {
-    console.log(process.env);
   return (
       <Router>
         <AppBar position="static">

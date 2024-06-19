@@ -30,8 +30,8 @@ const Map: React.FC = () => {
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
             {coord && (
-                <Marker position={center}>
-                </Marker>
+                <Marker position={center} />
+
             )}
         </MapContainer>
     );

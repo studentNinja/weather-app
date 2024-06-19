@@ -31,11 +31,11 @@ const weatherSchema = new mongoose.Schema({
     },
     dt: { type: Number, required: true },
     sys: {
-        type: { type: Number, required: true },
-        id: { type: Number, required: true },
-        country: { type: String, required: true },
-        sunrise: { type: Number, required: true },
-        sunset: { type: Number, required: true }
+        type: { type: Number,default:null},
+        id: { type: Number,default:null},
+        country: { type: String ,default:null},
+        sunrise: { type: Number ,default:null},
+        sunset: { type: Number,default:null}
     },
     timezone: { type: Number, required: true },
     id: { type: Number, required: true },

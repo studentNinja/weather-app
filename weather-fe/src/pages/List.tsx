@@ -1,15 +1,22 @@
 import React, { useEffect } from 'react';
-import { fetchHistory } from '../features/weather/weatherSlice';
-import { Container, Typography, List, ListItem, ListItemText, Box } from '@mui/material';
-import {useAppDispatch, useAppSelector} from "../app/hooks";
+import { fetchHistory, fetchWeather } from '../features/weather/weatherSlice';
+import { Container, Typography, List, ListItem, ListItemText, Box, Card, CardContent, Button } from '@mui/material';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { useNavigate } from 'react-router-dom';
 
 const HistoryList: React.FC = () => {
     const dispatch = useAppDispatch();
     const weather = useAppSelector((state) => state.weather);
+    const navigate = useNavigate();
 
     useEffect(() => {
         dispatch(fetchHistory());
     }, [dispatch]);
+
+    const handleItemClick = (city: string) => {
+        dispatch(fetchWeather(city));
+        navigate('/'); // Redirect to main page
+    };
 
     return (
         <Container>
@@ -19,9 +26,22 @@ const HistoryList: React.FC = () => {
                 {weather.status === 'succeeded' && weather.history && (
                     <List>
                         {weather.history.map((entry, index) => (
-                            <ListItem key={index}>
-                                <ListItemText primary={`${entry.searchedCity} - ${new Date(entry.createdAt).toLocaleString()}`} />
-                            </ListItem>
+                            <Card key={index} variant="outlined" sx={{ marginBottom: 2 }}>
+                                <CardContent>
+                                    <Typography variant="h6">{entry.searchedCity}</Typography>
+                                    <Typography variant="body2" color="textSecondary">
+                                        {new Date(entry.createdAt).toLocaleString()}
+                                    </Typography>
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={() => handleItemClick(entry.searchedCity)}
+                                        sx={{ marginTop: 2 }}
+                                    >
+                                        Search Again
+                                    </Button>
+                                </CardContent>
+                            </Card>
                         ))}
                     </List>
                 )}

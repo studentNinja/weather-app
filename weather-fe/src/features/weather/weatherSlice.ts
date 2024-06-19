@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axiosInstance from '../../api/axiosInstance';
 
 interface WeatherState {
@@ -15,9 +15,17 @@ const initialState: WeatherState = {
     error: null,
 };
 
-export const fetchWeather = createAsyncThunk('weather/fetchWeather', async (city: string) => {
-    const response = await axiosInstance.get(`/weather/city/${city}`);
-    return response.data;
+export const fetchWeather = createAsyncThunk('weather/fetchWeather', async (city: string, { rejectWithValue }) => {
+    try {
+        const response = await axiosInstance.get(`/weather/city/${city}`);
+        return response.data;
+    } catch (err: any) {
+        if (err.response && err.response.data && err.response.data.error) {
+            return rejectWithValue(err.response.data.error);
+        } else {
+            return rejectWithValue(err.message);
+        }
+    }
 });
 
 export const fetchHistory = createAsyncThunk('weather/fetchHistory', async () => {
@@ -33,6 +41,7 @@ const weatherSlice = createSlice({
         builder
             .addCase(fetchWeather.pending, (state) => {
                 state.status = 'loading';
+                state.error = null;
             })
             .addCase(fetchWeather.fulfilled, (state, action) => {
                 state.status = 'succeeded';
@@ -40,10 +49,11 @@ const weatherSlice = createSlice({
             })
             .addCase(fetchWeather.rejected, (state, action) => {
                 state.status = 'failed';
-                state.error = action.error.message ?? null;
+                state.error = action.payload as string;
             })
             .addCase(fetchHistory.pending, (state) => {
                 state.status = 'loading';
+                state.error = null;
             })
             .addCase(fetchHistory.fulfilled, (state, action) => {
                 state.status = 'succeeded';

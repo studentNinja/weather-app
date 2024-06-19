@@ -1,15 +1,24 @@
 const Weather = require('../models/weather');
+const e = require("express");
 
 exports.saveWeatherData = async (req, res) => {
     try {
-        const weatherData = req.weatherData;
-        const searchedCity = req.searchedCity;
-        console.log(weatherData,searchedCity);
-        const weather = new Weather({ searchedCity, ...weatherData });
-        await weather.save();
+        if (req.apiError) {
+            console.log(req.apiError);
+            return  res.status(Number(req.apiError.status)).json({ error: req.apiError.message });
+        } else {
+            const weatherData = req.weatherData;
+            const searchedCity = req.searchedCity;
 
-        res.json(weather);
+            const weather = new Weather({ searchedCity, ...weatherData });
+            await weather.save();
+
+            res.json(weatherData);
+        }
+
+
     } catch (error) {
+        console.log(error)
         res.status(500).json({ error: 'Failed to save weather data' });
     }
 };
