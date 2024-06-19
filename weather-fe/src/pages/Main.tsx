@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { fetchWeather } from '../features/weather/weatherSlice';
-import { RootState, AppDispatch } from '../app/store';
 import { Container, TextField, Button, Typography, Box, Paper } from '@mui/material';
 import Map from '../components/Map';
+import {useAppDispatch, useAppSelector} from "../app/hooks";
 
 const Main: React.FC = () => {
     const [city, setCity] = useState('');
     const [error, setError] = useState('');
-    const dispatch: AppDispatch = useDispatch();
-    const weather = useSelector((state: RootState) => state.weather);
+    const dispatch= useAppDispatch();
+    const weather = useAppSelector((state) => state.weather);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setCity(e.target.value);

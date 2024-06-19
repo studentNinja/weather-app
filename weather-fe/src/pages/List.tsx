@@ -1,12 +1,11 @@
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { fetchHistory } from '../features/weather/weatherSlice';
-import { RootState, AppDispatch } from '../app/store';
 import { Container, Typography, List, ListItem, ListItemText, Box } from '@mui/material';
+import {useAppDispatch, useAppSelector} from "../app/hooks";
 
 const HistoryList: React.FC = () => {
-    const dispatch: AppDispatch = useDispatch();
-    const weather = useSelector((state: RootState) => state.weather);
+    const dispatch = useAppDispatch();
+    const weather = useAppSelector((state) => state.weather);
 
     useEffect(() => {
         dispatch(fetchHistory());
